@@ -7,7 +7,7 @@ fetch('./data/comidas.json')          // Ruta al archivo JSON
     console.log('Comidas cargadas desde JSON:');
     console.log(data);    
     comidas = data;                   // Asignar el JSON a la variable comidas
-    mostrarComidasConForEach (comidas);
+    mostrarComidas(comidas);
   })
   .catch(error => {                   // Manejo de errores al leer el archivo JSON
     console.error('Error al leer el archivo JSON:', error);
@@ -19,145 +19,85 @@ fetch('./data/comidas.json')          // Ruta al archivo JSON
 const comidaContainer = document.getElementById('comidaContainer');
 
 
-let comidas = [
-  {
-    "nombre": "Asado",
-    "categoria": "Parrilla",
-    "provincia": "Buenos Aires",
-    "ingredientes": ["Carne vacuna", "Sal", "Chimichurri"]
-  },
-  {
-    "nombre": "Empanadas",
-    "categoria": "Horno",
-    "provincia": "Tucumán",
-    "ingredientes": ["Carne", "Cebolla", "Aceitunas", "Huevo"]
-  },
-  {
-    "nombre": "Locro",
-    "categoria": "Guiso",
-    "provincia": "Salta",
-    "ingredientes": ["Maíz", "Porotos", "Chorizo", "Panceta", "Zapallo"]
-  },
-  {
-    "nombre": "Milanesa",
-    "categoria": "Frito",
-    "provincia": "Buenos Aires",
-    "ingredientes": ["Carne", "Huevo", "Pan rallado", "Aceite"]
-  },
-  {
-    "nombre": "Humita en Chala",
-    "categoria": "Horno",
-    "provincia": "Jujuy",
-    "ingredientes": ["Maíz", "Queso", "Cebolla", "Ají molido"]
-  },
-  {
-    "nombre": "Choripán",
-    "categoria": "Parrilla",
-    "provincia": "Córdoba",
-    "ingredientes": ["Chorizo", "Pan", "Chimichurri"]
-  },
-  {
-    "nombre": "Provoleta",
-    "categoria": "Parrilla",
-    "provincia": "Buenos Aires",
-    "ingredientes": ["Queso provolone", "Orégano", "Aceite de oliva"]
-  },
-  {
-    "nombre": "Milanesas a la napolitana",
-    "categoria": "Frito",
-    "provincia": "Santa Fe",
-    "ingredientes": ["Carne", "Tomate", "Queso", "Jamón", "Orégano"]
-  },
-  {
-    "nombre": "Matambre a la pizza",
-    "categoria": "Parrilla",
-    "provincia": "Buenos Aires",
-    "ingredientes": ["Matambre", "Queso", "Tomate", "Orégano"]
-  },
-  {
-    "nombre": "Torta Frita",
-    "categoria": "Frito",
-    "provincia": "Entre Ríos",
-    "ingredientes": ["Harina", "Agua", "Sal", "Grasa"]
-  }
-]
-
-
+let comidas = [];
 
 
 const formComidaNueva = document.getElementById("agregarComidaForm")
 
 
-function mostrarComidasConForEach() {
-  comidaContainer.innerHTML = ""; // Limpia el contenedor antes de dibujar para no duplicar tarjetas
-  comidas.forEach(comida => {
+function mostrarComidas(lista) {
+  comidaContainer.innerHTML = ""; 
+  lista.forEach(comida => {
+    const ingredientesTexto = Array.isArray(comida.ingredientes) ? comida.ingredientes.join(', ') : comida.ingredientes;
+    
     comidaContainer.innerHTML += `
       <article class="card">
         <h2>${comida.nombre}</h2>
-        <p>Categoría: ${comida.categoria}</p>
-        <p>Provincia: ${comida.provincia}</p>
-        <p>Ingredientes: ${comida.ingredientes}</p>
+        <p><strong>Categoría:</strong> ${comida.categoria}</p>
+        <p><strong>Provincia:</strong> ${comida.provincia}</p>
+        <p><strong>Ingredientes:</strong> ${ingredientesTexto}</p>
       </article>
     `;
   });
 }
 
-
-mostrarComidasConForEach()
+mostrarComidas(comidas);
 
 
 
 
 const agregarComidaForm = document.getElementById("agregarComidaForm")
 agregarComidaForm.addEventListener("submit", (event) => {
-
-
   event.preventDefault();
 
-
-  alert("Comida agregada:" + event.target.nombre.value)
-
+  let arrayIngredientes = event.target.ingredientes.value.split(',').map(i => i.trim());
 
   let nuevaComida = {
     nombre: event.target.nombre.value,
     categoria: event.target.categoria.value,
     provincia: event.target.provincia.value,
-    ingredientes : event.target.ingredientes.value
-  }
+    ingredientes: arrayIngredientes
+  };
 
-
-  comidas.push(nuevaComida)
-  mostrarComidasConForEach()
-
-  const buscador = document.getElementById("buscador")
-  const filtroCategoria = document.getElementById("filtroCategoria")
-  const filtroProvincia = document.getElementById("filtroProvincia")
-
-  function filtrar(){
-    const comidasFiltradas = comidas.filter(comida => {
-      return comida.categoria.includes(filtroCategoria.value)
-    && comida.provincia.includes(filtroProvincia.value)
-    })
-    mostrarComidas(comidasFiltradas)
-  }
-
-  function buscar(){
-    const texto = buscador.value.toLowerCase()
-
-    const comidasFiltradas = comidas.filter( comida => {
-      return comida.nombre.toLowerCase().includes(texto)
-        ||comida.provincia.toLowerCase().includes(texto)
-        ||comida.categoria.toLowerCase().includes(texto)
-    })
-  }
-
-mostrarComidas(comidasFiltradas)
-
-filtroCategoria.addEventListener("change",filtrer)
-filtroProvincia.addEventListener("change",filtrer)
-
-})
+  comidas.push(nuevaComida);
+  
+  // SOLUCIÓN: Le pasamos 'comidas' como argumento para que redibuje todo
+  mostrarComidas(comidas);
+  
+  // Borra los textos que quedaron escritos en el formulario
+  agregarComidaForm.reset(); 
+});
 
 
 
 
+
+
+function aplicarFiltros() {
+  const textoBuscador = buscador.value.toLowerCase();
+  const catSeleccionada = filtroCategoria.value;
+  const provSeleccionada = filtroProvincia.value;
+
+  const comidasFiltradas = comidas.filter(comida => {
+    // Revisa si coincide la categoría seleccionada (o si está en "Todas")
+    const cumpleCategoria = catSeleccionada === "" || comida.categoria === catSeleccionada;
+    
+    // Revisa si coincide la provincia seleccionada (o si está en "Todas")
+    const cumpleProvincia = provSeleccionada === "" || comida.provincia.toLowerCase().includes(provSeleccionada.toLowerCase());
+
+    // Revisa si lo que escribió el usuario coincide con nombre, provincia o categoría
+    const cumpleBuscador = comida.nombre.toLowerCase().includes(textoBuscador) ||
+                           comida.provincia.toLowerCase().includes(textoBuscador) ||
+                           comida.categoria.toLowerCase().includes(textoBuscador);
+
+    // Solo pasa la comida que cumpla las tres condiciones a la vez
+    return cumpleCategoria && cumpleProvincia && cumpleBuscador;
+  });
+
+  mostrarComidas(comidasFiltradas);
+}
+
+// Eventos que activan los filtros en tiempo real
+buscador.addEventListener("input", aplicarFiltros); // <-- Este es el que te faltaba para escribir
+filtroCategoria.addEventListener("change", aplicarFiltros);
+filtroProvincia.addEventListener("change", aplicarFiltros);
