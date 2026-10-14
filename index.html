@@ -8,8 +8,29 @@
 </head>
 <body>
     <header>
-      <!-- Para filtros y navegacion -->
-    </header>
+      <input type = "search" id="buscador" placeholder="Buscar por nombre, provincia o categoria">
+
+      <select id="filtroCategoria">
+        <option value=""> Todas las categorias</option>
+        <option value="Parrilla"> Parrilla</option>
+        <option value="Horno"> Horno</option>
+        <option value="Guiso"> Guiso</option>
+        <option value="Frito"> Frito</option>
+        
+      </select>
+      
+      
+      <select id="filtroProvincia">
+        <option value=""> Todas las provincias</option>
+        <option value="Buenos Aires"> Buenos Aires</option>
+        <option value="Cordoba"> Cordoba</option>
+        <option value="Jujuy"> Jujuy</option>
+        <option value="Entre rios"> Entre rios</option>
+        <option value="Salta">Salta</option>
+        <option value="Santa Fe">Santa Fe</option>
+        <option value="Tucuman">Tucuman</option>
+      </select>
+     </header>
 
 
     <main class="comida-container" id="comidaContainer">
@@ -44,24 +65,9 @@
 
 <script type="module" src="./main.js"></script>
 
-<input type = "search" id="buscador" placeholder="Buscar por nombre, provincia o categoria">
-
-<select id="filtroCategoria">
-  <option value=""> Todas las categorias</option>
-  <option value="Parrilla"> Parrilla</option>
-  <option value="Horno"> Horno</option>
-  <option value="Guiso"> Guiso</option>
-  <option value="Frito"> Frito</option>
-  
-</select>
 
 
-<select id="filtroProvincia">
-  <option value=""> Todas las provincias</option>
-  <option value="Buenos Aires"> Buenos Aires</option>
-  <option value="Cordoba"> Cordoba</option>
-  <option value="Jujuy"> Jujuy</option>
-  <option value="Entre rios"> Entre rios</option>
+
   
 </select>
 </body>
