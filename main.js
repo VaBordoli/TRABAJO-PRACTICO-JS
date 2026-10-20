@@ -43,9 +43,6 @@ function mostrarComidas(lista) {
 
 mostrarComidas(comidas);
 
-
-
-
 const agregarComidaForm = document.getElementById("agregarComidaForm")
 agregarComidaForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -67,11 +64,6 @@ agregarComidaForm.addEventListener("submit", (event) => {
   // Borra los textos que quedaron escritos en el formulario
   agregarComidaForm.reset(); 
 });
-
-
-
-
-
 
 function aplicarFiltros() {
   const textoBuscador = buscador.value.toLowerCase();
@@ -101,3 +93,14 @@ function aplicarFiltros() {
 buscador.addEventListener("input", aplicarFiltros); // <-- Este es el que te faltaba para escribir
 filtroCategoria.addEventListener("change", aplicarFiltros);
 filtroProvincia.addEventListener("change", aplicarFiltros);
+
+const  agregarIngredientesBtn = document.getElementById("agregarIngrediente")
+const ingredientesContainer = document.querySelector(".contenedor-ingredientes")
+
+agregarIngredientesBtn.addEventListener("click", () => {
+
+ingredientesContainer.innerHTML += `<input type="text" class="ingrediente" placeholder="Un ingrediente por box" required>`
+}
+
+
+)
